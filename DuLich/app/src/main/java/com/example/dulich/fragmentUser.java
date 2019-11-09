@@ -11,7 +11,6 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,7 +21,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 
-public class setting extends Fragment {
+public class fragmentUser extends Fragment {
     int RC_SIGN_IN = 001;
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
@@ -82,16 +81,9 @@ public class setting extends Fragment {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-
-            Fragment fragment = new user();
-            Bundle bundle = new Bundle();
-            bundle.putString( "Email",account.getEmail());
-            bundle.putString( "avatar",account.getPhotoUrl().toString());
-            fragment.setArguments(bundle);
-            FragmentTransaction fr = getFragmentManager().beginTransaction();
-            fr.replace(R.id.frame_container,fragment);
-            fr.commit();
-
+            // Signed in successfully, show authenticated UI.
+           // Intent intent = new Intent();
+           // startActivity((MainActivity)getActivity());
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

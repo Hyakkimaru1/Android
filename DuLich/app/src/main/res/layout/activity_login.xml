@@ -127,17 +127,17 @@
         app:layout_constraintStart_toEndOf="@+id/forgot"
         app:layout_constraintTop_toBottomOf="@+id/login" />
 
-    <ImageView
-        android:id="@+id/icons_gg"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="100dp"
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="125dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toStartOf="@+id/icon_fb"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/forgot"
-        app:srcCompat="@mipmap/icons_google" />
+        app:layout_constraintTop_toBottomOf="@+id/forgot" />
 
     <ImageView
         android:id="@+id/icon_fb"
@@ -148,7 +148,7 @@
         android:layout_marginEnd="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.989"
-        app:layout_constraintStart_toEndOf="@+id/icons_gg"
+        app:layout_constraintStart_toEndOf="@+id/sign_in_button"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
         app:srcCompat="@mipmap/icons_facebook" />
 
