@@ -22,9 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 import com.example.dulich.R;
-import com.example.dulich.ui.login.LoginViewModel;
-import com.example.dulich.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
 

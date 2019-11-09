@@ -21,19 +21,64 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import android.widget.Toast;
+
+import org.json.JSONObject;
+
+
 
 public class setting extends Fragment {
     int RC_SIGN_IN = 001;
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
     Button login;
+
+    private static final String TAG = setting.class.getSimpleName();
+    CallbackManager callbackManager;
+    LoginButton fbLoginButton;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_login,container,false) ;
-
         signInButton = view.findViewById(R.id.sign_in_button);
         login = view.findViewById(R.id.login);
+
+        //fb
+        callbackManager = CallbackManager.Factory.create();
+        fbLoginButton = view.findViewById(R.id.login_button);
+        fbLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "======Facebook login success======");
+                Log.d(TAG, "Facebook Access Token: " + loginResult.getAccessToken().getToken());
+                //Toast.makeText(setting.this, "Login Facebook success.",LENGTH_SHORT).show();
+
+                getFbInfo();
+            }
+
+            @Override
+            public void onCancel() {
+                //Toast.makeText(setting.this, "Login Facebook cancelled.", LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e(TAG, "======Facebook login error======");
+                Log.e(TAG, "Error: " + error.toString());
+                //Toast.makeText(setting.this, "Login Facebook error.", LENGTH_SHORT).show();
+            }
+        });
+
 
 
 
@@ -69,6 +114,9 @@ public class setting extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //fb
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
@@ -78,7 +126,8 @@ public class setting extends Fragment {
         }
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    //fb
+    public void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
@@ -96,6 +145,29 @@ public class setting extends Fragment {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("ERROR", "signInResult:failed code=" + e.getStatusCode());
+        }
+    }
+
+    private void getFbInfo() {
+        if (AccessToken.getCurrentAccessToken() != null) {
+            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(final JSONObject me, GraphResponse response) {
+                            if (me != null) {
+                                Log.i("Login: ", me.optString("name"));
+                                Log.i("ID: ", me.optString("id"));
+
+                                //Toast.makeText(setting.this, "Name: " + me.optString("name"), LENGTH_SHORT).show();
+                                //Toast.makeText(setting.this, "ID: " + me.optString("id"), LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,link");
+            request.setParameters(parameters);
+            request.executeAsync();
         }
     }
 }
