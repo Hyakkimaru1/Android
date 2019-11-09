@@ -1,12 +1,15 @@
 package com.example.dulich;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.squareup.picasso.Picasso;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class setting extends Fragment {
@@ -27,6 +33,7 @@ public class setting extends Fragment {
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
     Button login;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,8 +41,6 @@ public class setting extends Fragment {
 
         signInButton = view.findViewById(R.id.sign_in_button);
         login = view.findViewById(R.id.login);
-
-
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -82,12 +87,13 @@ public class setting extends Fragment {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-
+            SharedPreferences preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean( "isLogIn",true );
+            editor.putString( "avatar",account.getPhotoUrl().toString());
+            editor.putString( "Email",account.getEmail());
+            editor.commit();
             Fragment fragment = new user();
-            Bundle bundle = new Bundle();
-            bundle.putString( "Email",account.getEmail());
-            bundle.putString( "avatar",account.getPhotoUrl().toString());
-            fragment.setArguments(bundle);
             FragmentTransaction fr = getFragmentManager().beginTransaction();
             fr.replace(R.id.frame_container,fragment);
             fr.commit();

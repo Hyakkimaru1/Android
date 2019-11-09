@@ -1,5 +1,7 @@
 package com.example.dulich;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +26,14 @@ public class user extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user,container,false) ;
-        Bundle bundle = getArguments();
-        if (bundle!=null)
-        {
-            textView = view.findViewById( R.id.name );
-            imageView=view.findViewById(R.id.avatar);
-           textView.setText( bundle.getString( "Email" ) );
-            Toast.makeText(getContext(),bundle.getString( "avatar" ),Toast.LENGTH_SHORT).show();
-           Picasso.get().load( bundle.getString( "avatar" ) ).into( imageView );
-        }
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE);
+
+        textView = view.findViewById( R.id.name );
+        imageView=view.findViewById(R.id.avatar);
+        textView.setText( preferences.getString( "Email","") );
+        if (preferences.getBoolean( "isLogIn",false ))
+            Toast.makeText(getContext(),"true",Toast.LENGTH_SHORT).show();
+        Picasso.get().load( preferences.getString( "avatar","" )).into( imageView );
         return view;
     }
 }

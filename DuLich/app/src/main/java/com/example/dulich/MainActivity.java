@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,19 +27,27 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     TextView textView;
-
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
         getSupportActionBar().setCustomView(R.layout.titlebar);
         textView = findViewById(R.id.titleBar);
         textView.setText("Travel Assistant");
+
+        //check xem tai khoan da duoc dang nhap hay chua
+        sharedPreferences = getSharedPreferences("isLogin",MODE_PRIVATE);
+
+
+        //xu ly bottom navigation
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
+        //Thay doi fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,new listTours()).commit();
 
     }
@@ -67,7 +77,11 @@ public class MainActivity extends AppCompatActivity {
                     textView.setText("Notifications");
                     break;
                 case R.id.navigation_setting:
-                    selectedFragment = new setting();
+
+                    if (sharedPreferences.getBoolean("isLogIn", false))
+                        selectedFragment = new user();
+                    else
+                       selectedFragment = new setting();
 
                     textView.setText("Setting");
                     break;

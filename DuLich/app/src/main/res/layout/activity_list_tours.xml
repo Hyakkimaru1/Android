@@ -27,33 +27,34 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="58dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp">
-
 
 
                 <TextView
                     android:id="@+id/tours"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="9dp"
                     android:layout_marginTop="15dp"
                     android:layout_toEndOf="@+id/imageView2"
                     android:text="trips"
+                    android:textSize="20dp"
                     android:textColor="#000"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="15dp"
+                    android:textSize="20dp"
                     android:layout_toEndOf="@+id/tours"
-                    android:text="TextView" />
+                    android:text="trips" />
 
                 <TextView
                     android:id="@+id/textView3"
@@ -79,6 +80,7 @@
                 android:layout_margin="20dp">
 
                 <ListView
+                    android:id="@+id/listTours"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
